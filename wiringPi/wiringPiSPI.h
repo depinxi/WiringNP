@@ -27,7 +27,9 @@ extern "C" {
 #endif
 
 int wiringPiSPIGetFd  (int channel) ;
+int wiringPiSPIDataW (int channel, unsigned char *data, int len) ;
 int wiringPiSPIDataRW (int channel, unsigned char *data, int len) ;
+int wiringPiSPIData (int channel, unsigned char *readBuffer, unsigned char *writeBuffer, int len) ;
 int wiringPiSPISetupMode (int channel, int speed, int mode) ;
 int wiringPiSPISetup  (int channel, int speed) ;
 

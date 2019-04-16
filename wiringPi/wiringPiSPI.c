@@ -59,7 +59,6 @@ int wiringPiSPIGetFd (int channel)
   return spiFds [channel & 1] ;
 }
 
-
 /*
  * wiringPiSPIDataRW:
  *	Write and Read a block of data over the SPI bus.
@@ -69,7 +68,17 @@ int wiringPiSPIGetFd (int channel)
  *********************************************************************************
  */
 
+int wiringPiSPIDataW (int channel, unsigned char *data, int len)
+{
+	return wiringPiSPIData (channel, NULL, data, len);
+}
+
 int wiringPiSPIDataRW (int channel, unsigned char *data, int len)
+{
+	return wiringPiSPIData (channel, data, data, len);
+}
+
+int wiringPiSPIData (int channel, unsigned char *readBuffer, unsigned char *writeBuffer, int len)
 {
   struct spi_ioc_transfer spi ;
 
@@ -80,8 +89,8 @@ int wiringPiSPIDataRW (int channel, unsigned char *data, int len)
 
   memset (&spi, 0, sizeof (spi)) ;
 
-  spi.tx_buf        = (unsigned long)data ;
-  spi.rx_buf        = (unsigned long)data ;
+  spi.tx_buf        = (unsigned long)writeBuffer ;
+  spi.rx_buf        = (unsigned long)readBuffer ;
   spi.len           = len ;
   spi.delay_usecs   = spiDelay ;
   spi.speed_hz      = spiSpeeds [channel] ;
